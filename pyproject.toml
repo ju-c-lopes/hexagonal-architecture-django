@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "lanchonete"
+version = "0.1.0"
+description = "Projeto Tech Challange para Pós-Graduação de Software Architecture na FIAP"
+authors = ["Juliano, Iana, Rebeca, Alexandre, Bruno"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = ">3.11"
+django = "*"
+djangorestframework = "*"
+
+
+[tool.poetry.group.dev.dependencies]
+pytest = "*"
+pytest-django = "*"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
