@@ -42,9 +42,11 @@ def criar_pedido_use_case(pedido_repo_mock, cliente_repo_mock):
     return CriarPedido(pedido_repo_mock, cliente_repo_mock)
 
 
-def test_criar_pedido_sucesso(criar_pedido_use_case, pedido_repo_mock, cliente_teste, itens_teste):
+def test_criar_pedido_sucesso(
+    criar_pedido_use_case, pedido_repo_mock, cliente_teste, itens_teste
+):
     # Configuração
-    # breakpoint()
+
     itens = itens_teste
     cliente = cliente_teste
 

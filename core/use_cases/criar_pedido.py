@@ -5,13 +5,15 @@ from core.repositories.pedido_repo import PedidoRepository
 
 
 class CriarPedido:
-    def __init__(self, pedido_repository: PedidoRepository, cliente_repository: ClienteRepository):
+    def __init__(
+        self, pedido_repository: PedidoRepository, cliente_repository: ClienteRepository
+    ):
         self.pedido_repository = pedido_repository
         self.cliente_repository = cliente_repository
 
     def execute(self, cliente_data, itens):
         # Verificar se o cliente já existe
-        # breakpoint()
+
         cliente = self.cliente_repository.buscar_por_id(cliente_data.id)
         if not isinstance(cliente, Cliente):
             # Criar novo cliente
