@@ -9,6 +9,8 @@ readme = "README.md"
 python = ">3.11"
 django = "*"
 djangorestframework = "*"
+pymongo = "*"
+python-decouple = "*"
 
 
 [tool.poetry.group.dev.dependencies]

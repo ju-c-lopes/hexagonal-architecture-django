@@ -1,16 +1,17 @@
 from typing import List
 
-
-class Item:
-    def __init__(self, nome: str, preco: float):
-        self.nome = nome
-        self.preco = preco
+from core.entities.cliente import Cliente
+from core.entities.item import Item
 
 
 class Pedido:
-    def __init__(self, cliente: str, itens: List[Item]):
+    def __init__(self, id, cliente: Cliente, itens: List[Item], status: str = "aberto"):
+        if not isinstance(cliente, Cliente):
+            raise ValueError("O cliente deve ser uma instância de Cliente.")
+        self.id = id
         self.cliente = cliente
         self.itens = itens
+        self.status = status
 
     def calcular_total(self):
         if not len(self.itens):
