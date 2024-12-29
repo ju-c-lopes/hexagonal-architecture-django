@@ -6,3 +6,6 @@ class Cliente:
         self.nome = nome
         self.email = email
         self.cpf = cpf
+
+    def __repr__(self):
+        return f"Cliente(id={self.id}, nome={self.nome}, email={self.email}, cpf={self.cpf})"

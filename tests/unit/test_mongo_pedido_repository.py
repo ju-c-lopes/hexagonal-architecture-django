@@ -1,38 +1,11 @@
 from unittest.mock import MagicMock
-
-import pytest
-
 from core.entities.cliente import Cliente
 from core.entities.item import Item
 from core.entities.pedido import Pedido
 from infrastructure.repositories.pedido_repo import MongoPedidoRepository
 
 
-@pytest.fixture
-def mongo_client_mock():
-    """Mock para o cliente do MongoDB."""
-    return MagicMock()
-
-
-@pytest.fixture
-def pedido_repository(mongo_client_mock):
-    """Instância do repositório com cliente mockado."""
-    db_mock = mongo_client_mock["lanchonete-teste"]
-    return MongoPedidoRepository(db_mock)
-
-
-@pytest.fixture
-def cliente_teste():
-    """Cliente de teste."""
-    return Cliente(
-        id=1,
-        nome="João",
-        email="joao@email.com",
-        cpf="112233445-56",
-    )
-
-
-def test_salvar_pedido(pedido_repository, mongo_client_mock, cliente_teste):
+def test_salvar_pedido(pedido_repository: MongoPedidoRepository, mongo_client_mock: MagicMock, cliente_teste: Cliente):
     itens = [Item(nome="Hambúrguer", preco=10.0)]
     pedido = Pedido(id='123', cliente=cliente_teste, itens=itens, status="aberto")
 
@@ -48,7 +21,7 @@ def test_salvar_pedido(pedido_repository, mongo_client_mock, cliente_teste):
     )
 
 
-def test_buscar_por_id(pedido_repository, mongo_client_mock, cliente_teste):
+def test_buscar_por_id(pedido_repository: MongoPedidoRepository, mongo_client_mock: MagicMock, cliente_teste: Cliente):
     # Mock do retorno do find_one
     mongo_client_mock["lanchonete"]["pedidos"].find_one.return_value = {
         "_id": "123",
@@ -65,7 +38,7 @@ def test_buscar_por_id(pedido_repository, mongo_client_mock, cliente_teste):
     assert pedido.itens[0].preco == 10.0
 
 
-def test_listar_todos(pedido_repository, mongo_client_mock, cliente_teste):
+def test_listar_todos(pedido_repository: MongoPedidoRepository, mongo_client_mock: MagicMock, cliente_teste: Cliente):
     # Mock do retorno do find
     mongo_client_mock["lanchonete"]["pedidos"].find.return_value = [
         {

@@ -13,6 +13,9 @@ class Pedido:
         self.itens = itens
         self.status = status
 
+    def __repr__(self):
+        return f"Pedido(id={self.id}, cliente={self.cliente}, itens={[item for item in self.itens]}, status={self.status})"
+
     def calcular_total(self):
         if not len(self.itens):
             raise ValueError("Não é possível criar um pedido sem itens!")

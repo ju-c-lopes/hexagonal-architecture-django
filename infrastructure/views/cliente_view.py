@@ -1,22 +1,43 @@
-from django.http.response import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
-from rest_framework.parsers import JSONParser
+from rest_framework import status
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from core.entities.cliente import Cliente
+from infrastructure.exceptions import DocumentNotFoundError
+from infrastructure.repositories.cliente_repo import ClienteRepository
 from infrastructure.serializers import ClienteSerializer
 
 
-@csrf_exempt
-def cliente_list(request, id):
-    if request.method == 'GET':
-        cliente = Cliente.objects.get(id=id)
-        serializer = ClienteSerializer(cliente, many=False)
-        return JsonResponse(serializer.data, safe=False)
+class ClienteAPIView(APIView):
+    def __init__(self, cliente_repo=None, **kwargs):
+        super().__init__(**kwargs)
+        self.cliente_repo = (
+            cliente_repo if cliente_repo is not None else ClienteRepository()
+        )
 
-    elif request.method == 'POST':
-        data = JSONParser().parse(request)
-        serializer = ClienteSerializer(data=data)
+    def get(self, request, id=None):
+        if id:
+            # Buscar cliente específico
+            cliente = self.cliente_repo.buscar_por_id(id)
+            if not cliente:
+                raise DocumentNotFoundError(f"Cliente com ID {id} não encontrado")
+            serializer = ClienteSerializer(cliente)
+            return Response(serializer.data)
+        else:
+            # Listar todos os clientes
+            clientes = self.cliente_repo.listar_todos()
+            serializer = ClienteSerializer(clientes, many=True)
+            return Response(serializer.data)
+
+    def post(self, request):
+        serializer = ClienteSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
-            return JsonResponse(serializer.data, status=201)
-        return JsonResponse(serializer.errors, status=401)
+            cliente = Cliente(
+                id=None,
+                nome=serializer.validated_data["nome"],
+                email=serializer.validated_data["email"],
+                cpf=serializer.validated_data["cpf"],
+            )
+            self.cliente_repo.salvar(cliente)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
