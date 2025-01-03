@@ -16,6 +16,7 @@ class MongoPedidoRepository(PedidoRepository):
     def salvar(self, pedido: Pedido) -> None:
         self.collection.insert_one(
             {
+                "_id": pedido.id,
                 "cliente": pedido.cliente.__dict__,
                 "itens": [item.__dict__ for item in pedido.itens],
                 "status": pedido.status,
@@ -28,7 +29,7 @@ class MongoPedidoRepository(PedidoRepository):
             return Pedido(
                 id=id,
                 cliente=pedido_data["cliente"],
-                itens=[Item(**item) for item in pedido_data["itens"]],
+                itens=[Item(id=item["id"], nome=item["nome"], preco=item["preco"]) for item in pedido_data["itens"]],
                 status=pedido_data["status"],
             )
         return None
@@ -39,7 +40,7 @@ class MongoPedidoRepository(PedidoRepository):
             Pedido(
                 id=pedido["_id"],
                 cliente=pedido["cliente"],
-                itens=[Item(**item) for item in pedido["itens"]],
+                itens=[Item(id=item["id"], nome=item["nome"], preco=item["preco"]) for item in pedido["itens"]],
                 status=pedido["status"],
             )
             for pedido in pedidos

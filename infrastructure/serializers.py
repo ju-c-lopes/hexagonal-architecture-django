@@ -4,6 +4,7 @@ from core.entities.cliente import Cliente
 
 
 class ItemSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
     nome = serializers.CharField(max_length=100)
     preco = serializers.FloatField()
 

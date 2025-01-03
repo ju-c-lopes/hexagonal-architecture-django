@@ -17,6 +17,8 @@ def test_criar_pedido_sucesso(
     assert pedido.cliente.__dict__ == cliente.__dict__
     assert len(pedido.itens) == 2
     assert pedido.calcular_total() == 15.0
+    assert pedido.itens[0].id is not None
+    assert pedido.itens[1].id is not None
 
 
 def test_criar_pedido_sem_itens(criar_pedido_use_case, cliente_teste):

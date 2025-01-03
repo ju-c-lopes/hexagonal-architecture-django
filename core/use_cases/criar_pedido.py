@@ -1,4 +1,5 @@
 from core.entities.cliente import Cliente
+from core.entities.item import Item
 from core.entities.pedido import Pedido
 from core.repositories.cliente_repo import ClienteRepository
 from core.repositories.pedido_repo import PedidoRepository
@@ -28,7 +29,7 @@ class CriarPedido:
         pedido = Pedido(
             id=self.pedido_repository.get_next_id(),
             cliente=cliente,
-            itens=itens,
+            itens=[Item(id=item.id, nome=item.nome, preco=item.preco) for item in itens],
         )
 
         # Salvar pedido no repositório

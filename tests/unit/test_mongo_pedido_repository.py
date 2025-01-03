@@ -6,7 +6,7 @@ from infrastructure.repositories.pedido_repo import MongoPedidoRepository
 
 
 def test_salvar_pedido(pedido_repository: MongoPedidoRepository, mongo_client_mock: MagicMock, cliente_teste: Cliente):
-    itens = [Item(nome="Hambúrguer", preco=10.0)]
+    itens = [Item(id=1, nome="Hambúrguer", preco=10.0)]
     pedido = Pedido(id='123', cliente=cliente_teste, itens=itens, status="aberto")
 
     pedido_repository.salvar(pedido)
@@ -15,7 +15,7 @@ def test_salvar_pedido(pedido_repository: MongoPedidoRepository, mongo_client_mo
     mongo_client_mock["lanchonete-teste"]["pedidos"].insert_one.assert_called_once_with(
         {
             "cliente": cliente_teste.__dict__,
-            "itens": [{"nome": "Hambúrguer", "preco": 10.0}],
+            "itens": [{"id": 1, "nome": "Hambúrguer", "preco": 10.0}],
             "status": "aberto",
         }
     )
@@ -26,7 +26,7 @@ def test_buscar_por_id(pedido_repository: MongoPedidoRepository, mongo_client_mo
     mongo_client_mock["lanchonete"]["pedidos"].find_one.return_value = {
         "_id": "123",
         "cliente": cliente_teste,
-        "itens": [{"nome": "Hambúrguer", "preco": 10.0}],
+        "itens": [{"id": 1, "nome": "Hambúrguer", "preco": 10.0}],
         "status": "aberto",
     }
 
@@ -34,6 +34,7 @@ def test_buscar_por_id(pedido_repository: MongoPedidoRepository, mongo_client_mo
 
     assert pedido.cliente.nome == "João"
     assert len(pedido.itens) == 1
+    assert pedido.itens[0].id == 1
     assert pedido.itens[0].nome == "Hambúrguer"
     assert pedido.itens[0].preco == 10.0
 
@@ -44,7 +45,7 @@ def test_listar_todos(pedido_repository: MongoPedidoRepository, mongo_client_moc
         {
             "_id": "123",
             "cliente": cliente_teste,
-            "itens": [{"nome": "Hambúrguer", "preco": 10.0}],
+            "itens": [{"id": 1, "nome": "Hambúrguer", "preco": 10.0}],
             "status": "aberto",
         }
     ]
@@ -54,5 +55,6 @@ def test_listar_todos(pedido_repository: MongoPedidoRepository, mongo_client_moc
     assert len(pedidos) == 1
     assert pedidos[0].cliente.nome == "João"
     assert len(pedidos[0].itens) == 1
+    assert pedidos[0].itens[0].id == 1
     assert pedidos[0].itens[0].nome == "Hambúrguer"
     assert pedidos[0].itens[0].preco == 10.0
