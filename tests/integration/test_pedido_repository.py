@@ -6,13 +6,6 @@ from core.entities.pedido import Pedido
 from infrastructure.repositories.pedido_repo import MongoPedidoRepository
 
 
-@pytest.fixture
-def pedido_repository(mongo_client_mock):
-    """Instância do repositório com cliente mockado."""
-    db_mock = mongo_client_mock["lanchonete-teste"]
-    return MongoPedidoRepository(db_mock)
-
-
 def test_salvar_pedido(pedido_repository: MongoPedidoRepository, mongo_client_mock: MagicMock, cliente_teste: Cliente):
     itens = [Item(nome="Hambúrguer", preco=10.0)]
     pedido = Pedido(id='123', cliente=cliente_teste, itens=itens, status="aberto")
