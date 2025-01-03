@@ -6,29 +6,6 @@ from core.entities.pedido import Pedido
 from infrastructure.repositories.cliente_repo import ClienteRepository
 from infrastructure.repositories.pedido_repo import MongoPedidoRepository
 
-@pytest.fixture
-def api_client():
-    return APIClient()
-
-@pytest.fixture
-def cliente_teste():
-    return Cliente(id=1, nome="João", email="joao@email.com", cpf="112233445-56")
-
-@pytest.fixture
-def itens_teste():
-    return [Item(nome="Hambúrguer", preco=10.0), Item(nome="Refrigerante", preco=5.0)]
-
-@pytest.fixture
-def pedido_teste(cliente_teste, itens_teste):
-    return Pedido(id=1, cliente=cliente_teste, itens=itens_teste)
-
-@pytest.fixture
-def cliente_repo():
-    return ClienteRepository()
-
-@pytest.fixture
-def pedido_repo():
-    return MongoPedidoRepository()
 
 def test_criar_pedido(api_client, cliente_teste, itens_teste):
     cliente_data = {
