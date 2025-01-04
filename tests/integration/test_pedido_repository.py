@@ -1,4 +1,3 @@
-import pytest
 from unittest.mock import MagicMock
 from core.entities.cliente import Cliente
 from core.entities.item import Item

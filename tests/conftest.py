@@ -58,7 +58,7 @@ def pedido_repo_mock():
 @pytest.fixture
 def itens_teste():
     """Itens de teste."""
-    return [Item(nome="Hambúrguer", preco=10.0), Item(nome="Refrigerante", preco=5.0)]
+    return [Item(id=1, nome="Hambúrguer", preco=10.0), Item(id=2, nome="Refrigerante", preco=5.0)]
 
 
 @pytest.fixture
