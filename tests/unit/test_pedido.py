@@ -6,7 +6,7 @@ from core.entities.item import Item
 
 def test_pedido_initialization():
     cliente = Cliente(id=1, nome="João", email="joao@email.com", cpf="112233445-56")
-    itens = [Item(nome="Hambúrguer", preco=10.0), Item(nome="Refrigerante", preco=5.0)]
+    itens = [Item(id=1, nome="Hambúrguer", preco=10.0), Item(id=2, nome="Refrigerante", preco=5.0)]
     pedido = Pedido(id=1, cliente=cliente, itens=itens, status="aberto")
 
     assert pedido.id == 1
@@ -17,7 +17,7 @@ def test_pedido_initialization():
 
 def test_pedido_calcular_total():
     cliente = Cliente(id=1, nome="João", email="joao@email.com", cpf="112233445-56")
-    itens = [Item(nome="Hambúrguer", preco=10.0), Item(nome="Refrigerante", preco=5.0)]
+    itens = [Item(id=1, nome="Hambúrguer", preco=10.0), Item(id=2, nome="Refrigerante", preco=5.0)]
     pedido = Pedido(id=1, cliente=cliente, itens=itens, status="aberto")
 
     total = pedido.calcular_total()

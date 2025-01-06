@@ -5,7 +5,7 @@ from core.entities.item import Item
 
 
 class Pedido:
-    def __init__(self, id, cliente: Cliente, itens: List[Item], status: str = "aberto"):
+    def __init__(self, id, cliente: Cliente, itens: List[Item], status: str):
         if not isinstance(cliente, Cliente):
             raise ValueError("O cliente deve ser uma instância de Cliente.")
         self.id = id

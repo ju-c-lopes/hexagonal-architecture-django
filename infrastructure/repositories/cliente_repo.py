@@ -21,6 +21,7 @@ class ClienteRepository(ClienteRepo):
         )
 
     def buscar_por_id(self, id: str):
+
         data = self.collection.find_one({"id": id})
         if data is None:
             raise DocumentNotFoundError(f"Cliente com ID {id} não encontrado")

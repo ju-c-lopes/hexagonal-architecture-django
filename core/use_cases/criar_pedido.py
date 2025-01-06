@@ -3,6 +3,7 @@ from core.entities.item import Item
 from core.entities.pedido import Pedido
 from core.repositories.cliente_repo import ClienteRepository
 from core.repositories.pedido_repo import PedidoRepository
+from infrastructure.exceptions import DocumentNotFoundError
 
 
 class CriarPedido:
@@ -12,12 +13,12 @@ class CriarPedido:
         self.pedido_repository = pedido_repository
         self.cliente_repository = cliente_repository
 
-    def execute(self, cliente_data, itens):
+    def execute(self, cliente_data, itens, status="PENDENTE", id=None) -> Pedido:
         # Verificar se o cliente já existe
+        try:
+            cliente = self.cliente_repository.buscar_por_id(str(cliente_data.id))
 
-        cliente = self.cliente_repository.buscar_por_id(cliente_data.id)
-        if not isinstance(cliente, Cliente):
-            # Criar novo cliente
+        except DocumentNotFoundError:
             cliente = Cliente(
                 id=cliente_data.id,
                 nome=cliente_data.nome,
@@ -27,9 +28,10 @@ class CriarPedido:
 
         # Criar instância de Pedido
         pedido = Pedido(
-            id=self.pedido_repository.get_next_id(),
+            id=id if id is not None else None,
             cliente=cliente,
-            itens=[Item(id=item.id, nome=item.nome, preco=item.preco) for item in itens],
+            itens=[Item(**item) for item in itens],
+            status=status,
         )
 
         # Salvar pedido no repositório

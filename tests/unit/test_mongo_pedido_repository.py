@@ -1,19 +1,25 @@
 from unittest.mock import MagicMock
+
 from core.entities.cliente import Cliente
 from core.entities.item import Item
 from core.entities.pedido import Pedido
-from infrastructure.repositories.pedido_repo import MongoPedidoRepository
+from infrastructure.repositories.pedido_repo import PedidoRepository
 
 
-def test_salvar_pedido(pedido_repository: MongoPedidoRepository, mongo_client_mock: MagicMock, cliente_teste: Cliente):
+def test_salvar_pedido(
+    pedido_repository: PedidoRepository,
+    mongo_client_mock: MagicMock,
+    cliente_teste: Cliente,
+):
     itens = [Item(id=1, nome="Hambúrguer", preco=10.0)]
-    pedido = Pedido(id='123', cliente=cliente_teste, itens=itens, status="aberto")
+    pedido = Pedido(id="123", cliente=cliente_teste, itens=itens, status="aberto")
 
     pedido_repository.salvar(pedido)
 
     # Verifica se o método insert_one foi chamado com os dados corretos
     mongo_client_mock["lanchonete-teste"]["pedidos"].insert_one.assert_called_once_with(
         {
+            "_id": "123",
             "cliente": cliente_teste.__dict__,
             "itens": [{"id": 1, "nome": "Hambúrguer", "preco": 10.0}],
             "status": "aberto",
@@ -21,11 +27,20 @@ def test_salvar_pedido(pedido_repository: MongoPedidoRepository, mongo_client_mo
     )
 
 
-def test_buscar_por_id(pedido_repository: MongoPedidoRepository, mongo_client_mock: MagicMock, cliente_teste: Cliente):
+def test_buscar_por_id(
+    pedido_repository: PedidoRepository,
+    mongo_client_mock: MagicMock,
+    cliente_teste: Cliente,
+):
     # Mock do retorno do find_one
     mongo_client_mock["lanchonete"]["pedidos"].find_one.return_value = {
         "_id": "123",
-        "cliente": cliente_teste,
+        "cliente": {
+            "id": cliente_teste.id,
+            "nome": cliente_teste.nome,
+            "email": cliente_teste.email,
+            "cpf": cliente_teste.cpf,
+        },
         "itens": [{"id": 1, "nome": "Hambúrguer", "preco": 10.0}],
         "status": "aberto",
     }
@@ -39,12 +54,16 @@ def test_buscar_por_id(pedido_repository: MongoPedidoRepository, mongo_client_mo
     assert pedido.itens[0].preco == 10.0
 
 
-def test_listar_todos(pedido_repository: MongoPedidoRepository, mongo_client_mock: MagicMock, cliente_teste: Cliente):
+def test_listar_todos(
+    pedido_repository: PedidoRepository,
+    mongo_client_mock: MagicMock,
+    cliente_teste: Cliente,
+):
     # Mock do retorno do find
     mongo_client_mock["lanchonete"]["pedidos"].find.return_value = [
         {
             "_id": "123",
-            "cliente": cliente_teste,
+            "cliente": cliente_teste.__dict__,
             "itens": [{"id": 1, "nome": "Hambúrguer", "preco": 10.0}],
             "status": "aberto",
         }
