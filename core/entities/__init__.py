@@ -1,0 +1,4 @@
+TipoCadastro = (
+    ("anônimo",),
+    ("cadastrado",),
+)

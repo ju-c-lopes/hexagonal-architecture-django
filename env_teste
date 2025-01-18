@@ -1,0 +1,5 @@
+MONGO_URI=mongodb+srv://user:token-mongo.mongodb.net/?retryWrites=true&w=majority&appName=FIAP-TC
+MONGO_URI_TEST=mongodb+srv://localhost:27017
+MONGO_DB_NAME_TEST=lanchonete_test
+DEBUG=True
+SECRET_KEY=senha-longa
